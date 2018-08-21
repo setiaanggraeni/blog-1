@@ -18,9 +18,11 @@ class UserController{
           res.status(201).json(newUser)
         })
         .catch(err => {
-          res.status(400).json(err)
+          // console.log(err)
+          res.status(400).json(err.message)
         })
       } else {
+        // console.log('--------', err)
         res.status(400).json({
           err,
           message: 'Email already exist!'
