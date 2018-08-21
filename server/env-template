@@ -1,0 +1,4 @@
+dbuser=your_dbuser
+dbpass=your_pass
+secretKey=your_secretKey
+NODE_ENV=which one you want to use, development or test
