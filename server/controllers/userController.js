@@ -18,11 +18,9 @@ class UserController{
           res.status(201).json(newUser)
         })
         .catch(err => {
-          // console.log(err)
           res.status(400).json(err.message)
         })
       } else {
-        // console.log('--------', err)
         res.status(400).json({
           err,
           message: 'Email already exist!'
@@ -39,7 +37,6 @@ class UserController{
     User.findOne({email: email})
     .then(user => {
       if(user){
-        // console.log('ini user =======' ,user)
         let compare = bcrypt.compareSync(password, user.password)
         if(compare){
           jwt.sign({id: user._id, name: user.name, isAdmin: user.isAdmin}, process.env.secretKey, function(err, token) {

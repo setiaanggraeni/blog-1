@@ -7,13 +7,11 @@ class ArticleController{
     let token = req.headers.token
     let {title, shortDescription, imgUrl, content} = req.body
     jwt.verify(token, process.env.secretKey, function(err, decoded) {
-      // console.log('---- ini decode -----', decoded)
       if(decoded.isAdmin === true){
         Article.create({
           title, shortDescription, imgUrl, content
         })
         .then(newArticle => {
-          // console.log(newArticle)
           res.status(201).json(newArticle)
         })
         .catch(err => {
@@ -90,15 +88,13 @@ class ArticleController{
     })
   }
 
-  static deleteArtcile(req, res){
-    // console.log('masuk edit')
+  static deleteArticle(req, res){
     let id = req.params.id
     let token = req.headers.token
     jwt.verify(token, process.env.secretKey, function(err, decoded) {
       if(decoded.isAdmin === true){
         Article.deleteOne({_id: id})
         .then(deletedArticle => {
-          // console.log('ini deleted=-----', typeof(deletedArticle))
           res.status(201).json({
             message: 'Delete article successfully!'
           })

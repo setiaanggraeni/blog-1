@@ -24,7 +24,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 export default {
   name: 'dashboard',
   data () {
@@ -35,41 +34,12 @@ export default {
       url: ''
     }
   },
-  mounted (){
-    let token = localStorage.getItem('token')
-  },
   methods: {
-    getImage (image) {
-      this.url = image.target.files[0]
-      console.log(this.url)
+    getImage (imageFile) {
+      this.$emit('image', imageFile)
     },
     addContent () {
-      let token = localStorage.getItem('token')
-      let formData = new FormData()
-      formData.append('image', this.url)
-      axios.post('http://localhost:3000/articles/upload', formData)
-      .then(result => {
-        axios.post('http://localhost:3000/articles/create', {
-        title: this.title,
-        shortDescription: this.shortDescription,
-        imgUrl: result.data.link,
-        content: this.theContent
-        }, {
-          headers: {
-            token: token
-          }
-        })
-          .then(newPost => {
-            this.$router.push('/')
-            console.log('Successfully create new content!')
-          })
-          .catch(err => {
-            console.log('Failed create new content!')
-          })
-      })
-      .catch(err => {
-        console.log('Failed create new content!')
-      })     
+      this.$emit('addcontent', {title: this.title, shortDescription: this.shortDescription, theContent: this.theContent, url: this.url})
     }
   }
 }
@@ -83,6 +53,5 @@ export default {
   .dashboard{
     width: 90%;
     margin-left: 10%;
-    // margin-top: 50px;
   }
 </style>

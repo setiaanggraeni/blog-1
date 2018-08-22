@@ -16,9 +16,9 @@
                 <p class="font-italic"> {{article.shortDescription}}</p>
               </div>
             </div>
-            <div class="col-sm-3" id="boxOption" v-if="show">
-              <i class="far fa-edit"></i> || 
-              <i class="far fa-trash-alt"></i>
+            <div class="col-sm-3" id="boxOption" v-if="seen">
+              <i class="far fa-edit"></i> ||
+              <i class="far fa-trash-alt" @click="deleteArticle(article._id)"></i>
             </div>
             <div class="col-sm-3" id="boxOption" v-else>
             </div>
@@ -26,8 +26,8 @@
           </li>
         </ul>
       </div>
-      <div class="col-sm-8" id="boxRight" v-if="seen">
-        <Dashboard/>
+      <div class="col-sm-8" id="boxRight" v-if="isPost">
+        <Dashboard @addcontent="addContent" @image="getImage" />
       </div>
       <div class="col-sm-3" id="boxOption" v-else>
       </div>
@@ -36,27 +36,64 @@
 </template>
 
 <script>
+import axios from 'axios'
 import Dashboard from '@/components/Dashboard.vue'
 
 export default {
   name: 'home',
-  props: ['msg', 'allarticles'],
+  props: ['allarticles'],
   components: {
     Dashboard
   },
   data () {
     return {
       seen: true,
-      show: true
+      isPost: true
     }
   },
-  mounted (){
+  mounted () {
     let isAdmin = localStorage.getItem('isAdmin')
-    let token = localStorage.getItem('token')
-    console.log('ini admin g', isAdmin)
-    if(isAdmin === false){
+    if (isAdmin === 'false' || isAdmin === null) {
       this.seen = false
-      this.show = false
+      this.isPost = false
+    }
+  },
+  methods: {
+    deleteArticle (id) {
+      this.$emit('deletearticle', id)
+    },
+    getImage (image) {
+      this.url = image.target.files[0]
+    },
+    addContent (input) {
+      let token = localStorage.getItem('token')
+      let formData = new FormData()
+      formData.append('image', this.url)
+      axios.post('http://localhost:3000/articles/upload', formData)
+        .then(result => {
+          axios.post('http://localhost:3000/articles/create', {
+            title: input.title,
+            shortDescription: input.shortDescription,
+            imgUrl: result.data.link,
+            content: input.theContent
+          }, {
+            headers: {
+              token: token
+            }
+          })
+            .then(newPost => {
+              this.$router.push('/')
+              console.log('Successfully create new content!')
+            })
+            .catch(err => {
+              console.log(err)
+              console.log('Failed create new content!')
+            })
+        })
+        .catch(err => {
+          console.log(err)
+          console.log('Failed create new content!')
+        })
     }
   }
 }
@@ -81,20 +118,10 @@ a {
 .media{
   width:100%;
 }
-// #boxLeft{
-//   background-color: #42b983
-// }
-
-// #boxRight{
-//   background-color: red
-// }
-
 #image{
   width: 50px;
 }
-
 #boxTextContent{
-  // border: 1px solid black; width:100%;
   text-align: left;
 }
 </style>

@@ -28,7 +28,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 export default {
   name: 'register',
   data () {
@@ -40,17 +39,7 @@ export default {
   },
   methods: {
     register () {
-      axios.post('http://localhost:3000/users/register', {
-        name: this.name,
-        email: this.email,
-        password: this.password
-      })
-        .then(newUser => {
-          console.log(newUser)
-        })
-        .catch(err => {
-          console.log(err.message)
-        })
+      this.$emit('register', {name: this.name, email: this.email, password: this.password})
     }
   }
 }
