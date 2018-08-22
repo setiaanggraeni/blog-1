@@ -43,7 +43,7 @@ class UserController{
         let compare = bcrypt.compareSync(password, user.password)
         if(compare){
           jwt.sign({id: user._id, name: user.name, isAdmin: user.isAdmin}, process.env.secretKey, function(err, token) {
-            res.status(201).json({token: token})
+            res.status(201).json({token: token, isAdmin: user.isAdmin})
           })
         } else {
           res.status(400).json({

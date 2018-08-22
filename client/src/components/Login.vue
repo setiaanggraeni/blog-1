@@ -42,7 +42,14 @@ export default {
         password: this.password
       })
       .then(userLogin => {
-        console.log('user login berhasil')
+        localStorage.setItem('token', userLogin.data.token)
+        localStorage.setItem('isAdmin', userLogin.data.isAdmin)
+        if(userLogin.data.isAdmin === true){
+          this.$router.push('/dashboard')
+        } else {
+          this.$router.push('/')
+        }
+        // console.log(userLogin)
       })
       .catch(err => {
         console.log(err)

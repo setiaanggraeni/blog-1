@@ -20,7 +20,7 @@
             <button class="btn my-2 my-sm-0" type="submit" data-toggle="modal" data-target="#modalRegister">Register</button>
           </div>
           <div v-else>
-            <button class="btn my-2 my-sm-0" type="submit">Logout</button>
+            <button class="btn my-2 my-sm-0" type="submit" @click="logout">Logout</button>
           </div>
         </form>
       </div>
@@ -46,6 +46,10 @@ export default {
   methods: {
     search (inputSearch) {
       console.log(inputSearch)
+    },
+    logout () {
+      localStorage.clear()
+      this.$router.push('/')
     }
   }
 }
