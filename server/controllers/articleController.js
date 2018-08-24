@@ -4,41 +4,27 @@ const User = require('../models/user')
 
 class ArticleController{
   static addArticle(req, res){
-    let token = req.headers.token
     let {title, shortDescription, imgUrl, content} = req.body
-    jwt.verify(token, process.env.secretKey, function(err, decoded) {
-      if(decoded.isAdmin === true){
-        Article.create({
-          title, shortDescription, imgUrl, content
-        })
-        .then(newArticle => {
-          res.status(201).json(newArticle)
-        })
-        .catch(err => {
-          res.status(400).json({
-            err,
-            message: 'Add article failed!'
-          })
-        })
-      } else {
-        res.status(401).json({
-          err,
-          message: 'Your have no access!'
-        })
-      }
+    Article.create({
+      title, shortDescription, imgUrl, content, userId: req.user._id
+    })
+    .then(newArticle => {
+      res.status(201).json(newArticle)
+    })
+    .catch(err => {
+      res.status(400).json({
+        err,
+        message: 'Add article failed!'
+      })
     })
   }
 
   static getAllArticles(req, res){
     Article.find({})
-    .then(articles => {
+    .populate('commentId')
+    .exec(function(err, articles){
+      if(err) res.status(400).json({err, message: 'Artciles not found!'})
       res.status(201).json(articles)
-    })
-    .catch(err => {
-      res.status(400).json({
-        err,
-        message: 'Articles not found!'
-      })
     })
   }
 
@@ -61,16 +47,17 @@ class ArticleController{
   static edit(req, res){
     let id = req.params.id
     let {title, shortDescription, imgUrl, content} = req.body
-    let token = req.headers.token
-    jwt.verify(token, process.env.secretKey, function(err, decoded) {
-      if(decoded.isAdmin === true){
+    // Article.findOne({_id: id})
+    // .then(article => {
+    //   console.log('----article----',article.userId._id)
+    //   console.log('----user----',req.user._id)
+    //   if(article.userId == req.user._id){
         Article.update({_id: id}, {
           $set: {
             title, shortDescription, imgUrl, content
           }
         })
         .then(updateArticle => {
-          // console.log('ini updated=-----', updateArticle)
           res.status(201).json(updateArticle)
         })
         .catch(err => {
@@ -79,20 +66,17 @@ class ArticleController{
             message: 'Failed to update article!'
           })
         })
-      } else {
-        res.status(401).json({
-          err,
-          message: 'You have no access to edit article!'
-        })
-      }
-    })
+    //   } else {
+    //     console.log('you have no access to edit this article!')
+    //   }
+    // })
   }
 
   static deleteArticle(req, res){
     let id = req.params.id
-    let token = req.headers.token
-    jwt.verify(token, process.env.secretKey, function(err, decoded) {
-      if(decoded.isAdmin === true){
+    // Article.findOne({_id: id})
+    // .then(article => {
+    //   if(article.userId == req.user._id){
         Article.deleteOne({_id: id})
         .then(deletedArticle => {
           res.status(201).json({
@@ -105,13 +89,10 @@ class ArticleController{
             message: 'Failed to delete article!'
           })
         })
-      } else {
-        res.status(401).json({
-          err,
-          message: 'You have no access to delete article!'
-        })
-      }
-    })
+    //   } else {
+    //     console.log('you have no access to edit this article!')
+    //   }
+    // })
   }
 }
 

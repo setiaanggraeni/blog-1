@@ -19,7 +19,7 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-            <button type="button" class="btn btn-primary" @click="register">Register</button>
+            <button type="button" class="btn btn-primary" @click="register" data-dismiss="modal">Register</button>
           </div>
         </div>
       </div>

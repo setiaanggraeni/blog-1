@@ -6,7 +6,8 @@ var ArticleSchema = new Schema({
   shortDescription: String,
   imgUrl: String,
   content: String,
-  commentId: [{ type: Schema.Types.ObjectId, ref: 'Comments' }]
+  commentId: [{ type: Schema.Types.ObjectId, ref: 'Comments' }],
+  userId: { type: Schema.Types.ObjectId, ref: 'Users' }
 }, {
   timestamps: true
 });

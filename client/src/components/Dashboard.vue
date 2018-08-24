@@ -1,6 +1,11 @@
 <template>
   <div class="dashboard">
-    <h3>Create New Post Content</h3><br>
+    <div v-if="createoredit">
+      <h3>Create New Post Content</h3><br>
+    </div>
+    <div v-else>
+      <h3>Edit Post Content</h3><br>
+    </div>
     <form>
       <div class="form-group">
         <label>Content Title</label>
@@ -26,6 +31,7 @@
 <script>
 export default {
   name: 'dashboard',
+  props: ['foreditarticle', 'createoredit'],
   data () {
     return {
       title: '',
@@ -40,6 +46,14 @@ export default {
     },
     addContent () {
       this.$emit('addcontent', {title: this.title, shortDescription: this.shortDescription, theContent: this.theContent, url: this.url})
+    }
+  },
+  watch: {
+    foreditarticle (val) {
+      this.title = val.title
+      this.shortDescription = val.shortDescription
+      this.theContent = val.content
+      console.log('ini kah ',val)
     }
   }
 }
