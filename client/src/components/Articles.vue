@@ -9,6 +9,7 @@
             </div>
           <div class="col-sm-7" id="boxTextContent">
             <div class="media-body">
+              <div id="posted">Posted by:  {{article.userId.name}}, {{(article.createdAt).slice(0,10)}}</div>
               <router-link :to="{name: 'detailArticle', params: {id: article.title}}" class="mt-0 mb-1" @click.native="detail(article)">{{article.title}}</router-link>
               <p class="font-italic"> {{article.shortDescription}}</p>
             </div>
@@ -73,5 +74,10 @@ a {
 }
 #boxTextContent{
   text-align: left;
+}
+#posted{
+  color: gray;
+  font-size: 10px;
+  font-style: italic;
 }
 </style>

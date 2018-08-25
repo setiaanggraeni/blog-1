@@ -4,11 +4,11 @@ var Schema = mongoose.Schema;
 var UserSchema = new Schema({
   name: {
     type: String,
-    required: 'Name is required'
+    required: true
   },
   email: {
     type: String,
-    required: 'Email is required',
+    required: true,
     validate:{
       validator: function(value){
          let re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
@@ -19,13 +19,10 @@ var UserSchema = new Schema({
   },
   password: {
     type: String,
-    required: 'Password is required'
+    required: true,
+    min: 6
   },
-  isAdmin: {
-    type: Boolean,
-    default: false
-  }
-}, {
+},{
   timestamps: true
 });
 

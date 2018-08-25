@@ -57,6 +57,10 @@ export default {
     articles: 'getAllArticles',
     seen (val) {
       this.seen = val
+    },
+    content (val) {
+      console.log('content', val)
+      this.content = val
     }
   },
   mounted () {
@@ -80,7 +84,16 @@ export default {
     },
     detailArticle (input){
       this.contentTrue = true
-      this.content = input
+      console.log(input._id)
+      axios.get(`http://localhost:3000/articles/find/${input._id}`)
+      .then(article => {
+        console.log('ini article',article)
+        this.content = article.data
+      })
+      .catch(err => {
+        swal('Ups!', 'Failed to load content!', 'warning')
+      })
+      // this.content = input
     },
     editAricle (input){
       this.forEdit = input
@@ -94,10 +107,11 @@ export default {
         }
       })
         .then(articleDeleted => {
-          swal("Yeayyy!", "Article deleted!", "success")
+          swal('Yeayyy!', 'Article deleted!', 'success')
         })
         .catch(err => {
-          console.log(err.response.data.message)
+          swal('Failed!', 'You have no access to delete this content!', 'warning')
+          // console.log(err.response.data.message)
         })
     },
     login (input) {
@@ -111,6 +125,7 @@ export default {
           localStorage.setItem('token', userLogin.data.token)
         })
         .catch(err => {
+          swal('Failed!', 'Login failed! Please check your credential!', 'warning')
           console.log(err.response.data.message)
         })
     },
@@ -131,6 +146,7 @@ export default {
           localStorage.setItem('token', newUser.data.token)
         })
         .catch(err => {
+          swal('Failed!', 'Register failed! Please follow the instruction!', 'warning')
           console.log(err.response.data.message)
         })
     },
@@ -155,10 +171,10 @@ export default {
               }
             })
               .then(newPost => {
-                swal("Yeayyy!", "Add content success!", "success")
+                swal('Yeayyy!', 'Add content success!', 'success')
               })
               .catch(err => {
-                swal("Failed!", "Please login!", "warning")
+                swal('Failed!', 'Please login!', 'warning')
               })
           } else {
             axios.put(`http://localhost:3000/articles/edit/${this.forEdit._id}`, {
@@ -172,15 +188,15 @@ export default {
               }
             })
             .then(newContent => {
-              swal("Yeayyy!", "Edit content success!", "success")
+              swal('Yeayyy!', 'Edit content success!', 'success')
             })
             .catch(err => {
-              swal("Failed!", "Edit content failed!", "warning")
+              swal('Failed!', 'Edit content failed! You have no access to edit this content!', 'warning')
             })
           }
         })
         .catch(err => {
-          swal("Failed!", "Create content failed!", "warning")
+          swal('Failed!', 'Create content failed! Please check your login status!', 'warning')
         })
     },
     addComment (input) {
@@ -193,9 +209,11 @@ export default {
         }
       })
       .then(newComment => {
-        console.log('masuk comment berhasil ------ ', newComment)
+        // this.detailArticle()
+        swal('Yeayyy!', 'Add comment success!', 'success')
       })
       .catch(err => {
+        swal('Failed!', 'Create comment failed! Please check your login status!', 'warning')
         console.log(err.response.data.message)
       })
     },
@@ -207,20 +225,22 @@ export default {
         }
       })
         .then(commentDeleted => {
-          console.log('Article deleted!')
+        //  this.detailArticle()
+          swal('Yeayyy!', 'Article deleted!', 'success')
         })
         .catch(err => {
+          swal('Failed!', 'You have no access to delete this comment!', 'warning')
           console.log(err.response.data.message)
         })
     },
     search (input) {
       axios.get(`http://localhost:3000/articles/search?q=${input}`)
-      .then(articles => {
-        this.articles = articles.data
-      })
-      .catch(err => {
-        console.log(err.response.data.message)
-      })
+        .then(articles => {
+          this.articles = articles.data
+        })
+        .catch(err => {
+          console.log(err.response.data.message)
+        })
     }
   }
 }

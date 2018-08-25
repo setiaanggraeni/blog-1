@@ -22,6 +22,7 @@ class ArticleController{
   static getAllArticles(req, res){
     Article.find({})
     .populate('commentId')
+    .populate('userId')
     .exec(function(err, articles){
       if(err) res.status(400).json({err, message: 'Artciles not found!'})
       res.status(201).json(articles)
@@ -32,6 +33,7 @@ class ArticleController{
     let id = req.params.id
     Article.findOne({_id: id})
     .populate('commentId')
+    .populate('userId')
     .exec(function (err, result) {
       if(err){
         res.status(400).json({
@@ -45,13 +47,14 @@ class ArticleController{
   }
 
   static edit(req, res){
+    // console.log('ini user dr auth ====== ', req.user)
     let id = req.params.id
     let {title, shortDescription, imgUrl, content} = req.body
-    // Article.findOne({_id: id})
-    // .then(article => {
-    //   console.log('----article----',article.userId._id)
-    //   console.log('----user----',req.user._id)
-    //   if(article.userId == req.user._id){
+    Article.findOne({_id: id})
+    .then(article => {
+      // console.log('----article----',article.userId._id)
+      // console.log('----user----',req.user._id)
+      if(String(article.userId._id) == String(req.user._id)){
         Article.update({_id: id}, {
           $set: {
             title, shortDescription, imgUrl, content
@@ -66,17 +69,19 @@ class ArticleController{
             message: 'Failed to update article!'
           })
         })
-    //   } else {
-    //     console.log('you have no access to edit this article!')
-    //   }
-    // })
+      } else {
+        res.status(400).json({
+          message: 'you have no access to edit this article!'
+        })
+      }
+    })
   }
 
   static deleteArticle(req, res){
     let id = req.params.id
-    // Article.findOne({_id: id})
-    // .then(article => {
-    //   if(article.userId == req.user._id){
+    Article.findOne({_id: id})
+    .then(article => {
+      if(String(article.userId._id) == String(req.user._id)){
         Article.deleteOne({_id: id})
         .then(deletedArticle => {
           res.status(201).json({
@@ -89,10 +94,12 @@ class ArticleController{
             message: 'Failed to delete article!'
           })
         })
-    //   } else {
-    //     console.log('you have no access to edit this article!')
-    //   }
-    // })
+      } else {
+        res.status(400).json({
+          message: 'you have no access to delete this article!'
+        })
+      }
+    })
   }
 
   static search (req, res) {

@@ -2,7 +2,7 @@
   <div class="jumbotron p-3 p-md-5 bg-faded" id="mainpost">
     <div class="row">
       <div class="col-md-6 px-0">
-        <h3 class="display-4 font-italic">Be Creative by Write Your On Blog Here</h3>
+        <h3 class="display-4 font-italic">Be Creative by Write Your Own Blog Here</h3>
         <p class="lead my-3">Social blogs and social blogging are phrases used to describe second-generation Internet publishing tools that blend features of both traditional blogging and social networking.</p>
       </div>
       <div class="col-md-6 px-0">
