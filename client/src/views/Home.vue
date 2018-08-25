@@ -1,14 +1,14 @@
 <template>
   <div class="home">
-    <Navbars/>
+    <Navbars @search="search" :seen="seen" @logout="logout"/>
     <Login @login="login" />
     <Register @register="register" />
-    <!-- <MainPost/> -->
+    <MainPost/>
 
     <div class="container">
       <div class="row">
         <div class="col-sm-4" id="boxLeft">
-          <Articles :allarticles="articles" @detail="detailArticle" @edit="editAricle" @deletearticle="deleteArticle" />
+          <Articles :allarticles="articles" :edittrue="edittrue" @detail="detailArticle" @edit="editAricle" @deletearticle="deleteArticle" />
         </div>
         <div class="col-sm-8" id="boxRight">
           <div v-if="contentTrue">
@@ -47,12 +47,26 @@ export default {
       contentTrue: true,
       content: '',
       forEdit: '',
-      editor: true
+      editor: true,
+      articleSearch: '',
+      seen: true,
+      edittrue: false
+    }
+  },
+  watch: {
+    articles: 'getAllArticles',
+    seen (val) {
+      this.seen = val
     }
   },
   mounted () {
     this.contentTrue = false
     this.getAllArticles()
+    let token = localStorage.getItem('token')
+    if (token) {
+      this.seen = false,
+      this.edittrue = true
+    }
   },
   methods: {
     getAllArticles () {
@@ -69,7 +83,6 @@ export default {
       this.content = input
     },
     editAricle (input){
-      // console.log('ini input', input)
       this.forEdit = input
       this.editor = false
     },
@@ -81,8 +94,7 @@ export default {
         }
       })
         .then(articleDeleted => {
-          console.log(articleDeleted)
-          console.log('Article deleted!')
+          swal("Yeayyy!", "Article deleted!", "success")
         })
         .catch(err => {
           console.log(err.response.data.message)
@@ -94,13 +106,18 @@ export default {
         password: input.password
       })
         .then(userLogin => {
+          this.seen = false
+          this.edittrue = true
           localStorage.setItem('token', userLogin.data.token)
-          // localStorage.setItem('isAdmin', userLogin.data.isAdmin)
-          this.$router.push('/')
         })
         .catch(err => {
           console.log(err.response.data.message)
         })
+    },
+    logout () {
+      this.seen = true
+      this.edittrue = false
+      localStorage.clear()
     },
     register (input) {
       axios.post('http://localhost:3000/users/register', {
@@ -109,7 +126,9 @@ export default {
         password: input.password
       })
         .then(newUser => {
-          console.log(newUser)
+          this.seen = false
+          this.edittrue = true
+          localStorage.setItem('token', newUser.data.token)
         })
         .catch(err => {
           console.log(err.response.data.message)
@@ -119,8 +138,6 @@ export default {
       this.url = image.target.files[0]
     },
     addContent (input) {
-      console.log('ini editor di add content', this.editor)
-      console.log('ini forEdit di add content',this.forEdit)
       let token = localStorage.getItem('token')
       let formData = new FormData()
       formData.append('image', this.url)
@@ -138,12 +155,10 @@ export default {
               }
             })
               .then(newPost => {
-                this.$router.push('/')
-                console.log('Successfully create new content!')
+                swal("Yeayyy!", "Add content success!", "success")
               })
               .catch(err => {
-                console.log(err.response.data.message)
-                // console.log('Failed create new content!')
+                swal("Failed!", "Please login!", "warning")
               })
           } else {
             axios.put(`http://localhost:3000/articles/edit/${this.forEdit._id}`, {
@@ -157,20 +172,18 @@ export default {
               }
             })
             .then(newContent => {
-              console.log('ini content baru ------ ', newContent)
+              swal("Yeayyy!", "Edit content success!", "success")
             })
             .catch(err => {
-              console.log(err.response.data.message)
+              swal("Failed!", "Edit content failed!", "warning")
             })
           }
         })
         .catch(err => {
-          console.log(err.response.data.message)
-          // console.log('Failed create new content!')
+          swal("Failed!", "Create content failed!", "warning")
         })
     },
     addComment (input) {
-      console.log(input.id)
       let token = localStorage.getItem('token')
       axios.post(`http://localhost:3000/articles/comment/${input.id}`, {
         comment: input.comment
@@ -187,7 +200,6 @@ export default {
       })
     },
     deleteComment (input) {
-      console.log(input)
       let token = localStorage.getItem('token')
       axios.delete(`http://localhost:3000/articles/delete/comment/${input.commentId}`, {
         headers: {
@@ -195,12 +207,20 @@ export default {
         }
       })
         .then(commentDeleted => {
-          console.log(commentDeleted)
           console.log('Article deleted!')
         })
         .catch(err => {
           console.log(err.response.data.message)
         })
+    },
+    search (input) {
+      axios.get(`http://localhost:3000/articles/search?q=${input}`)
+      .then(articles => {
+        this.articles = articles.data
+      })
+      .catch(err => {
+        console.log(err.response.data.message)
+      })
     }
   }
 }

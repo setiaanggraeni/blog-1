@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const {addArticle, getAllArticles, getById, edit, deleteArticle} = require('../controllers/articleController')
+const {addArticle, getAllArticles, getById, edit, deleteArticle, search} = require('../controllers/articleController')
 const {addComment, deleteComment} = require('../controllers/commentController')
 const {auth} = require('../middleware/auth')
 const images = require('../helpers/images')
@@ -12,6 +12,7 @@ router.post('/create', auth, addArticle)
       .delete('/delete/:id', auth, deleteArticle)
       .post('/comment/:articleId', auth, addComment)
       .delete('/delete/comment/:id', auth, deleteComment)
+      .get('/search', search)
 
 router.post('/upload',
 images.multer.single('image'), 

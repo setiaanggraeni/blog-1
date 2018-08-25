@@ -15,7 +15,22 @@ class UserController{
           name, email, password: hash
         })
         .then(newUser => {
-          res.status(201).json(newUser)
+          User.findOne({email: email})
+          .then(user => {
+            if(user){
+              jwt.sign({id: user._id, name: user.name, email: user.email}, process.env.secretKey, function(err, token) {
+                res.status(201).json({token: token})
+              })
+            } else {
+              res.status(400).json({
+                err,
+                message: 'Email not found!'
+              })
+            }
+          })
+          .catch(err => {
+            res.status(400).json(err.message)
+          })
         })
         .catch(err => {
           res.status(400).json(err.message)

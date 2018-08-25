@@ -31,25 +31,18 @@
 <script>
 export default {
   name: 'navbars',
+  props: ['seen'],
   data () {
     return {
-      inputSearch: '',
-      seen: true
-    }
-  },
-  mounted () {
-    let token = localStorage.getItem('token')
-    if (token) {
-      this.seen = false
+      inputSearch: ''
     }
   },
   methods: {
     search (inputSearch) {
-      console.log(inputSearch)
+      this.$emit('search', inputSearch)
     },
     logout () {
-      localStorage.clear()
-      this.$router.push('/')
+      this.$emit('logout')
     }
   }
 }

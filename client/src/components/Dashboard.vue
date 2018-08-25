@@ -53,7 +53,6 @@ export default {
       this.title = val.title
       this.shortDescription = val.shortDescription
       this.theContent = val.content
-      console.log('ini kah ',val)
     }
   }
 }

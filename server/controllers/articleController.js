@@ -94,6 +94,21 @@ class ArticleController{
     //   }
     // })
   }
+
+  static search (req, res) {
+    Article.find({
+      $or: [{title: new RegExp(req.query.q, 'i')},
+            {shortDescription: new RegExp(req.query.q, 'i')},
+            {content: new RegExp(req.query.q, 'i')}
+            ]
+    })
+    .then(artciles => {
+      res.status(201).json(artciles)
+    })
+    .catch(err => {
+      res.status(400).json(err.message)
+    })
+  }
 }
 
 module.exports = ArticleController

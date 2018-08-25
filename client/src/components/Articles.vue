@@ -13,8 +13,12 @@
               <p class="font-italic"> {{article.shortDescription}}</p>
             </div>
           </div>
+          <div v-if="edittrue">
             <i class="far fa-edit" @click="editArticle(article)"></i> ||
             <i class="far fa-trash-alt" @click="deleteArticle(article._id)"></i>
+          </div>
+          <div v-else>
+          </div>
           </div>
         </li>
       </ul>
@@ -27,14 +31,9 @@ import Dashboard from '@/components/Dashboard.vue'
 
 export default {
   name: 'articles',
-  props: ['allarticles'],
+  props: ['allarticles', 'edittrue'],
   components: {
     Dashboard
-  },
-  data () {
-    return {
-
-    }
   },
   methods: {
     deleteArticle (id) {
