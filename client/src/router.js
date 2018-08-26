@@ -6,6 +6,7 @@ import TheArticle from './components/TheArticle.vue'
 Vue.use(Router)
 
 export default new Router({
+  mode: 'history',
   routes: [
     {
       path: '/',

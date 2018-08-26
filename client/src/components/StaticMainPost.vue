@@ -6,7 +6,7 @@
         <p class="lead my-3">Social blogs and social blogging are phrases used to describe second-generation Internet publishing tools that blend features of both traditional blogging and social networking.</p>
       </div>
       <div class="col-md-6 px-0">
-        <img src="https://cdn.pixabay.com/photo/2018/04/13/16/49/laptop-3317007__480.jpg" style="width:500px;border-radius:7px;">
+        <img src="../assets/laptop.jpg" style="width:500px;border-radius:7px;">
       </div>
     </div>
   </div>

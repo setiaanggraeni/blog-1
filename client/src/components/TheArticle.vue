@@ -42,11 +42,16 @@ export default {
       commenttrue: ''
     }
   },
+  watch: {
+    content (val) {
+      this.content = val
+    }
+  },
   mounted () {
     let token = localStorage.getItem('token')
-      if (token) {
-        this.commenttrue = true
-      }
+    if (token) {
+      this.commenttrue = true
+    }
   },
   methods: {
     addComment () {

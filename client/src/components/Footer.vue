@@ -1,7 +1,7 @@
 <template>
     <footer class="footer">
       <div class="container">
-        <span class="text-muted">Copyright © Setia Anggraeni - 2018</span>
+        <span class="text-muted">Copyright © Setia Anggraeni - 2018 - It's just for homework - Images grab from Google</span>
       </div>
     </footer>
 </template>

@@ -1,4 +1,3 @@
-const bcrypt = require('bcryptjs')
 const ModelComment = require('../models/comment')
 const Article = require('../models/article')
 
@@ -36,12 +35,9 @@ class CommentController {
 
   static deleteComment(req, res){
     let id = req.params.id
-    // ModelComment.findOne({_id: id})
-    // .then(comment => {
-    //   console.log(typeof(comment.userId))
-    //   console.log(typeof(req.user._id))
-      
-      // if(comment.userId == req.user._id){
+    ModelComment.findOne({_id: id})
+    .then(comment => {
+      if(String(comment.userId) == String(req.user._id)){
         ModelComment.deleteOne({_id: id})
         .then(deletedComment => {
           res.status(201).json({
@@ -54,14 +50,12 @@ class CommentController {
             message: 'Failed to delete comment!'
           })
         })
-    //   } else {
-    //     console.log('You have no access to delete this comment!')
-    //     // res.status(400).json({
-    //     //   err,
-    //     //   message: 'You have no access to delete this comment!'
-    //     // })
-    //   }
-    // })
+      } else {
+        res.status(400).json({
+          message: 'You have no access to delete this comment!'
+        })
+      }
+    })
     
   }
 

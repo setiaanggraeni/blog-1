@@ -58,10 +58,15 @@ export default {
     seen (val) {
       this.seen = val
     },
-    content (val) {
-      console.log('content', val)
-      this.content = val
+    '$route' (to, from) {
+      if (to.path === '/:id') {
+        this.detailArticle(this.$route.query.id)
+      }
     }
+    // content (val) {
+    //   console.log('content', val)
+    //   this.content = val
+    // }
   },
   mounted () {
     this.contentTrue = false
@@ -83,17 +88,15 @@ export default {
         })
     },
     detailArticle (input){
+      console.log(input)
       this.contentTrue = true
-      console.log(input._id)
       axios.get(`http://localhost:3000/articles/find/${input._id}`)
       .then(article => {
-        console.log('ini article',article)
         this.content = article.data
       })
       .catch(err => {
         swal('Ups!', 'Failed to load content!', 'warning')
       })
-      // this.content = input
     },
     editAricle (input){
       this.forEdit = input
@@ -111,7 +114,6 @@ export default {
         })
         .catch(err => {
           swal('Failed!', 'You have no access to delete this content!', 'warning')
-          // console.log(err.response.data.message)
         })
     },
     login (input) {
@@ -209,7 +211,6 @@ export default {
         }
       })
       .then(newComment => {
-        // this.detailArticle()
         swal('Yeayyy!', 'Add comment success!', 'success')
       })
       .catch(err => {
