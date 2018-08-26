@@ -14,13 +14,13 @@
         </ul>
         <form class="form-inline my-2 my-lg-0">
           <input class="form-control mr-sm-2" type="search" @keyup.enter="search(inputSearch)" v-model="inputSearch" placeholder="Search" aria-label="Search">
-          <button class="btn btn-outline-success my-2 my-sm-0" type="submit" @click="search(inputSearch)">Search</button>
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit" @click.prevent="search(inputSearch)">Search</button>
           <div v-if="seen">
             <button class="btn my-2 my-sm-0" type="submit" data-toggle="modal" data-target="#modalLogin">Login</button>
             <button class="btn my-2 my-sm-0" type="submit" data-toggle="modal" data-target="#modalRegister">Register</button>
           </div>
           <div v-else>
-            <button class="btn my-2 my-sm-0" type="submit" @click="logout">Logout</button>
+            <button class="btn my-2 my-sm-0" type="submit" @click.prevent="logout">Logout</button>
           </div>
         </form>
       </div>
