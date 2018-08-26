@@ -79,7 +79,7 @@ export default {
   },
   methods: {
     getAllArticles () {
-      axios.get('http://localhost:3000/articles')
+      axios.get('https://blogserver.setiaanggraeni.co/articles')
         .then(dataArticles => {
           this.articles = dataArticles.data
         })
@@ -90,7 +90,7 @@ export default {
     detailArticle (input){
       console.log(input)
       this.contentTrue = true
-      axios.get(`http://localhost:3000/articles/find/${input._id}`)
+      axios.get(`https://blogserver.setiaanggraeni.co/articles/find/${input._id}`)
       .then(article => {
         this.content = article.data
       })
@@ -104,7 +104,7 @@ export default {
     },
     deleteArticle (id) {
       let token = localStorage.getItem('token')
-      axios.delete(`http://localhost:3000/articles/delete/${id}`, {
+      axios.delete(`https://blogserver.setiaanggraeni.co/articles/delete/${id}`, {
         headers: {
           token: token
         }
@@ -117,7 +117,7 @@ export default {
         })
     },
     login (input) {
-      axios.post('http://localhost:3000/users/login', {
+      axios.post('https://blogserver.setiaanggraeni.co/users/login', {
         email: input.email,
         password: input.password
       })
@@ -137,7 +137,7 @@ export default {
       localStorage.clear()
     },
     register (input) {
-      axios.post('http://localhost:3000/users/register', {
+      axios.post('https://blogserver.setiaanggraeni.co/users/register', {
         name: input.name,
         email: input.email,
         password: input.password
@@ -159,10 +159,10 @@ export default {
       let token = localStorage.getItem('token')
       let formData = new FormData()
       formData.append('image', this.url)
-      axios.post('http://localhost:3000/articles/upload', formData)
+      axios.post('https://blogserver.setiaanggraeni.co/articles/upload', formData)
         .then(result => {
           if(this.editor === true){
-            axios.post('http://localhost:3000/articles/create', {
+            axios.post('https://blogserver.setiaanggraeni.co/articles/create', {
               title: input.title,
               shortDescription: input.shortDescription,
               imgUrl: result.data.link,
@@ -179,7 +179,7 @@ export default {
                 swal('Failed!', 'Please login!', 'warning')
               })
           } else {
-            axios.put(`http://localhost:3000/articles/edit/${this.forEdit._id}`, {
+            axios.put(`https://blogserver.setiaanggraeni.co/articles/edit/${this.forEdit._id}`, {
               title: input.title,
               shortDescription: input.shortDescription,
               imgUrl: result.data.link,
@@ -203,7 +203,7 @@ export default {
     },
     addComment (input) {
       let token = localStorage.getItem('token')
-      axios.post(`http://localhost:3000/articles/comment/${input.id}`, {
+      axios.post(`https://blogserver.setiaanggraeni.co/articles/comment/${input.id}`, {
         comment: input.comment
       }, {
         headers: {
@@ -220,7 +220,7 @@ export default {
     },
     deleteComment (input) {
       let token = localStorage.getItem('token')
-      axios.delete(`http://localhost:3000/articles/delete/comment/${input.commentId}`, {
+      axios.delete(`https://blogserver.setiaanggraeni.co/articles/delete/comment/${input.commentId}`, {
         headers: {
           token: token
         }
@@ -235,7 +235,7 @@ export default {
         })
     },
     search (input) {
-      axios.get(`http://localhost:3000/articles/search?q=${input}`)
+      axios.get(`https://blogserver.setiaanggraeni.co/articles/search?q=${input}`)
         .then(articles => {
           this.articles = articles.data
         })
