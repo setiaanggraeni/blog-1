@@ -15,7 +15,7 @@
             <label>Email</label>
             <input type="email" class="form-control" v-model="email" placeholder="Enter email">
             <label>Password</label>
-            <input type="password" class="form-control" v-model="password" placeholder="Enter password">
+            <input type="password" class="form-control" v-model="password" placeholder="Minimum password length is 5">
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>

@@ -52,6 +52,9 @@ export default {
     if (token) {
       this.commenttrue = true
     }
+    if (this.$route.params.id !== undefined) {
+      this.$emit('detail', this.$route.params.id)
+    }
   },
   methods: {
     addComment () {

@@ -8,33 +8,38 @@ class UserController{
   static register(req, res){
     let {name, email, password} = req.body
     var hash = bcrypt.hashSync(password, salt)
+
     User.findOne({email:email})
     .then(user => {
       if(!user){
-        User.create({
-          name, email, password: hash
-        })
-        .then(newUser => {
-          User.findOne({email: email})
-          .then(user => {
-            if(user){
-              jwt.sign({id: user._id, name: user.name, email: user.email}, process.env.secretKey, function(err, token) {
-                res.status(201).json({token: token})
-              })
-            } else {
-              res.status(400).json({
-                err,
-                message: 'Email not found!'
-              })
-            }
+        if(password.length < 5) {
+          res.status(400).json({message: 'Minimum password length is 5!'})
+        } else {
+          User.create({
+            name, email, password: hash
+          })
+          .then(newUser => {
+            User.findOne({email: email})
+            .then(user => {
+              if(user){
+                jwt.sign({id: user._id, name: user.name, email: user.email}, process.env.secretKey, function(err, token) {
+                  res.status(201).json({token: token})
+                })
+              } else {
+                res.status(400).json({
+                  err,
+                  message: 'Email not found!'
+                })
+              }
+            })
+            .catch(err => {
+              res.status(400).json(err.message)
+            })
           })
           .catch(err => {
             res.status(400).json(err.message)
           })
-        })
-        .catch(err => {
-          res.status(400).json(err.message)
-        })
+        }
       } else {
         res.status(400).json({
           err,
