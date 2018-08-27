@@ -24,6 +24,6 @@ export default {
     width: 90%;
     margin-left: 5%;
     text-align: left;
-    margin-top: 20px;
+    margin-top: 70px;
   }
 </style>
