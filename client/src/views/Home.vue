@@ -59,18 +59,16 @@ export default {
       this.seen = val
     },
     '$route' (to, from) {
-      if (this.$route.params.id == undefined) {
+      if (this.$route.params.id === undefined) {
         this.contentTrue = false
       } else {
         this.contentTrue = true
+        this.detailArticle(this.$route.params.id)
       }
-      // if (to.path === '/:id') {
-      //   this.detailArticle(this.$route.params.id)
-      // }
     },
     content (val) {
-      this.detailArticle(this.content)
-      this.content = val
+      this.detailArticle(val._id)
+      // console.log('content', val)
     }
   },
   mounted () {
@@ -80,6 +78,10 @@ export default {
     if (token) {
       this.seen = false,
       this.edittrue = true
+    }
+    if(this.$route.params.id !== undefined){
+      this.contentTrue = true
+        this.detailArticle(this.$route.params.id)
     }
   },
   methods: {
@@ -94,7 +96,7 @@ export default {
     },
     detailArticle (input){
       this.contentTrue = true
-      axios.get(`https://blogserver.setiaanggraeni.co/articles/find/${input._id}`)
+      axios.get(`https://blogserver.setiaanggraeni.co/articles/find/${input}`)
       .then(article => {
         this.content = article.data
       })

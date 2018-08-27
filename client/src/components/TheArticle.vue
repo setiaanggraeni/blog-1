@@ -42,18 +42,15 @@ export default {
       commenttrue: ''
     }
   },
-  watch: {
-    content (val) {
-      this.content = val
-    }
-  },
+  // watch: {
+  //   content (val) {
+  //     this.content = val
+  //   }
+  // },
   mounted () {
     let token = localStorage.getItem('token')
     if (token) {
       this.commenttrue = true
-    }
-    if (this.$route.params.id !== undefined) {
-      this.$emit('detail', this.$route.params.id)
     }
   },
   methods: {
