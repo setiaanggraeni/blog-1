@@ -46,6 +46,10 @@ export default {
     },
     addContent () {
       this.$emit('addcontent', {title: this.title, shortDescription: this.shortDescription, theContent: this.theContent, url: this.url})
+      this.title = ''
+      this.shortDescription = '',
+      this.theContent = '',
+      this.url = ''
     }
   },
   watch: {

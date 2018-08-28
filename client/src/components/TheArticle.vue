@@ -56,6 +56,7 @@ export default {
   methods: {
     addComment () {
       this.$emit('addcomment', {comment: this.inputComment, id: this.content._id})
+      this.inputComment = ''
     },
     deleteComment (input) {
       this.$emit('deletecomment', input)
